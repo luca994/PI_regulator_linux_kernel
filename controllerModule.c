@@ -30,6 +30,13 @@ static int get_temperature_msr(void){
 	return val;
 }
 
+static int read_frequency_msr(void){
+	u32 val, dummy;
+	rdmsr(IA32_PERF_STATUS, val, dummy);
+	val = val & 0xFFFF;
+	int freq = val >> 8;
+	return freq;
+}
 
 static void write_frequency_msr(int8_t mult_freq){
 	unsigned long val, dummy;
