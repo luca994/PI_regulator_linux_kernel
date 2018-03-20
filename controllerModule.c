@@ -59,9 +59,12 @@ static void write_frequency_msr(int8_t mult_freq){
  */
 static int controller_thread(void *data){
 	while(!kthread_should_stop()){
-		printk(KERN_INFO "I'm running!\n");
 		int temp = get_temperature_msr();
-		printk(KERN_INFO "Temperature = %i°C\n", temp);
+		int mul = freq_param;
+		write_frequency_msr(mul);
+		printk(KERN_INFO "Setting freq to: %i", mul);
+		printk(KERN_INFO "Freq = %i   Volt = %iV\n", read_frequency_msr());
+		//printk(KERN_INFO "Temperature = %i°C\n", temp);
 		msleep(TIMER);
 	}
 	printk(KERN_INFO "Thread end\n");
