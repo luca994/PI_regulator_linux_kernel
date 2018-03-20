@@ -7,6 +7,8 @@
 
 #define TCC_CELSIUS 100
 #define IA32_THERM_STATUS 0x19c
+#define IA32_PERF_CTL 0x199
+#define IA32_PERF_STATUS 0x198
 #define TIMER 1000
 
 static struct task_struct *thread = NULL;
