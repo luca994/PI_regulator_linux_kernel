@@ -13,6 +13,9 @@
 
 static struct task_struct *thread = NULL;
 
+static int freq_param = 8;
+module_param(freq_param, int, S_IWUSR);
+
 
 /*
  *reads the temperature from the processor register IA32_THERM_STATUS
