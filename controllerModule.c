@@ -3,8 +3,27 @@
 #include <linux/init.h>
 #include <linux/kthread.h>
 #include <linux/delay.h>
+#include <asm/msr.h>
+
+#define TCC_CELSIUS 100
+#define IA32_THERM_STATUS 0x19c
+#define TIMER 1000
 
 static struct task_struct *thread = NULL;
+
+
+/*
+ *reads the temperature from the processor register IA32_THERM_STATUS
+ *using rdmsr function, then returns it
+ */
+static int get_temperature_msr(void){
+	u32 val, dummy;
+	rdmsr(IA32_THERM_STATUS, val, dummy);
+	val = val & 0x7F0000;
+	val = val >> 16;
+	val = TCC_CELSIUS - val;
+	return val;
+}
 
 /*
  *this function runs a loop that prints a message (for the moment)
@@ -13,7 +32,9 @@ static struct task_struct *thread = NULL;
 static int controller_thread(void *data){
 	while(!kthread_should_stop()){
 		printk(KERN_INFO "I'm running!\n");
-		msleep(100);
+		int temp = get_temperature_msr();
+		printk(KERN_INFO "Temperature = %i°C\n", temp);
+		msleep(TIMER);
 	}
 	printk(KERN_INFO "Thread end\n");
 	return 0;
