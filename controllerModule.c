@@ -30,6 +30,22 @@ static int get_temperature_msr(void){
 	return val;
 }
 
+
+static void write_frequency_msr(int8_t mult_freq){
+	unsigned long val, dummy;
+	unsigned short reset = 0xFF;
+	unsigned short temp;
+	rdmsr(IA32_PERF_CTL, val, dummy);
+	//printk(KERN_INFO "val before reset:%i\n", val);
+	val = val & reset;
+	//printk(KERN_INFO "val after reset:%i\n", val);
+	temp = mult_freq << 8;
+	//printk(KERN_INFO "temp:%i\n", temp);
+	val = val | temp;
+	//printk(KERN_INFO "val final:%i\n", val);
+	wrmsr(IA32_PERF_CTL, val, dummy);
+}
+
 /*
  *this function runs a loop that prints a message (for the moment)
  *
