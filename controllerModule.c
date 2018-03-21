@@ -16,7 +16,7 @@
 static struct task_struct *thread = NULL;
 
 static int freq_param = 8;
-module_param(freq_param, int, S_IWUSR);
+module_param(freq_param,int, S_IWUSR);
 
 
 /*
@@ -86,16 +86,20 @@ static void write_frequency_msr(u64 mult_freq){
  *
  */
 static int controller_thread(void *data){
+    u64 val, dummy;
+    u64 mul = freq_param;
+    int temp;
+    disable_tcc();
+    write_frequency_msr(mul);
+    printk(KERN_INFO "Setting freq to: %i", mul);
 	while(!kthread_should_stop()){
-		int temp = get_temperature_msr();
-		int mul = freq_param;
-		write_frequency_msr(mul);
-		printk(KERN_INFO "Setting freq to: %i", mul);
-		printk(KERN_INFO "Freq = %i   Volt = %iV\n", read_frequency_msr());
-		//printk(KERN_INFO "Temperature = %i°C\n", temp);
+		temp = get_temperature_msr();
+		printk(KERN_INFO "Frequency Multiplier = %i\n", read_frequency_msr());
+		printk(KERN_INFO "Temperature = %i°C\n", temp);
 		msleep(TIMER);
 	}
-	printk(KERN_INFO "Thread end\n");
+	enable_tcc();
+    printk(KERN_INFO "Thread end\n");
 	return 0;
 }
 
