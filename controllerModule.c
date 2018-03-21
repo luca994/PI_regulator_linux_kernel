@@ -32,12 +32,17 @@ static int get_temperature_msr(void){
 	return val;
 }
 
+/*
+ * this function reads the current value for the frequency in the msr register
+ * called IA32_PERF_STATUS
+ */
 static int read_frequency_msr(void){
 	u32 val, dummy;
 	rdmsr(IA32_PERF_STATUS, val, dummy);
-	val = val & 0xFFFF;
-	int freq = val >> 8;
-	return freq;
+	val &= 0xFFFF;
+	return (val >> 8);
+}
+
 }
 
 static void write_frequency_msr(int8_t mult_freq){
