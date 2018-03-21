@@ -43,6 +43,26 @@ static int read_frequency_msr(void){
 	return (val >> 8);
 }
 
+/*
+ * this function disbles the bit related to TCC in msr register
+ * called IA32_MISC_ENABLE
+ */
+static void disable_tcc(void){
+    u64 val, dummy;
+    rdmsr(IA32_MISC_ENABLE, val, dummy);
+    val &= ~(1UL<<3); 
+    wrmsr(IA32_MISC_ENABLE, val, dummy);
+}
+
+/*
+ * this function enables the bit related to TCC in msr register
+ * called IA32_MISC_ENABLE
+ */
+static void enable_tcc(void){
+    u64 val, dummy;
+    rdmsr(IA32_MISC_ENABLE, val, dummy);
+    val |= (1UL<<3);
+    wrmsr(IA32_MISC_ENABLE, val, dummy);
 }
 
 static void write_frequency_msr(int8_t mult_freq){
