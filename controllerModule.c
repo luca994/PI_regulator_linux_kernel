@@ -1,4 +1,4 @@
-#include <linux/module.h>
+﻿#include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/kthread.h>
@@ -6,9 +6,11 @@
 #include <asm/msr.h>
 
 #define TCC_CELSIUS 100
+#define LOGICAL_CORES_N 8
 #define IA32_THERM_STATUS 0x19c
 #define IA32_PERF_CTL 0x199
 #define IA32_PERF_STATUS 0x198
+#define IA32_MISC_ENABLE 0x1a0
 #define TIMER 1000
 
 static struct task_struct *thread = NULL;
