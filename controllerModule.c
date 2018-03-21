@@ -65,19 +65,20 @@ static void enable_tcc(void){
     wrmsr(IA32_MISC_ENABLE, val, dummy);
 }
 
-static void write_frequency_msr(int8_t mult_freq){
-	unsigned long val, dummy;
-	unsigned short reset = 0xFF;
-	unsigned short temp;
-	rdmsr(IA32_PERF_CTL, val, dummy);
-	//printk(KERN_INFO "val before reset:%i\n", val);
-	val = val & reset;
-	//printk(KERN_INFO "val after reset:%i\n", val);
-	temp = mult_freq << 8;
-	//printk(KERN_INFO "temp:%i\n", temp);
-	val = val | temp;
-	//printk(KERN_INFO "val final:%i\n", val);
-	wrmsr(IA32_PERF_CTL, val, dummy);
+/*
+ * this function writes the new frequency in the msr register called
+ * IA32_PERF_CTL in all the cpu cores
+ * 
+ */
+static void write_frequency_msr(u64 mult_freq){
+	u64 val, dummy;
+    int i,j;
+    rdmsr(IA32_PERF_CTL, val, dummy);
+    for(i=8;i<16;i++)
+        val &= ~(1UL<<i);
+    val |= (mult_freq<<8);
+    for(j=0;j<LOGICAL_CORES_N;j++)
+    wrmsr_on_cpu(j,IA32_PERF_CTL, val, dummy);
 }
 
 /*
