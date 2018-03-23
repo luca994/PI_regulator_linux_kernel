@@ -8,6 +8,7 @@
 #define TCC_CELSIUS 100
 #define LOGICAL_CORES_N 8
 #define IA32_THERM_STATUS 0x19c
+#define MSR_TEMPERATURE_TARGET 0x1a2
 #define IA32_PERF_CTL 0x199
 #define IA32_PERF_STATUS 0x198
 #define IA32_MISC_ENABLE 0x1a0
@@ -24,11 +25,14 @@ module_param(freq_param,int, S_IWUSR);
  *using rdmsr function, then returns it
  */
 static int get_temperature_msr(void){
-	u32 val, dummy;
+	int tjunction_celsius;
+    u32 val, dummy;
+    rdmsr(MSR_TEMPERATURE_TARGET,val,dummy);
+    tjunction_celsius = ((val&(0xff<<16))>>16);
 	rdmsr(IA32_THERM_STATUS, val, dummy);
 	val = val & 0x7F0000;
 	val = val >> 16;
-	val = TCC_CELSIUS - val;
+	val = tjunction_celsius - val;
 	return val;
 }
 
