@@ -93,7 +93,8 @@ static int controller_thread(void *data){
     u64 val, dummy;
     u64 mul = freq_param;
     int temp;
-    disable_tcc();
+    printk(KERN_INFO "Controller Started\n");
+    //disable_tcc();
     write_frequency_msr(mul);
     printk(KERN_INFO "Setting freq to: %i", mul);
 	while(!kthread_should_stop()){
@@ -102,8 +103,8 @@ static int controller_thread(void *data){
 		printk(KERN_INFO "Temperature = %i°C\n", temp);
 		msleep(TIMER);
 	}
-	enable_tcc();
-    printk(KERN_INFO "Thread end\n");
+	//enable_tcc();
+    printk(KERN_INFO "Controller switched off\n");
 	return 0;
 }
 
@@ -113,7 +114,6 @@ static int controller_thread(void *data){
  *
  */
 static int __init controller_module_init(void){
-	printk(KERN_INFO "Thread started\n");
 	thread = kthread_run(controller_thread, NULL, "control_module_thread");
 	return 0;
 }
