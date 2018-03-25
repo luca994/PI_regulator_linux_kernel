@@ -1,4 +1,5 @@
 #!/bin/bash
+# use sudo to execute this script
 
 read -p 'Choose the interval tracing time: ' interv
 echo
