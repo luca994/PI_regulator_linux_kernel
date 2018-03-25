@@ -129,6 +129,11 @@ static int thread_controller(void *data){
 	while(!kthread_should_stop()){
 		values.temp=get_temperature_msr();		
 		values.mul=read_frequency_msr();
+		
+		//alternative method to print the messages (used for debugging, it should takes tenth of microseconds). 
+		//You have to read the file /sys/kernel/debug/tracing/options/trace.
+		//trace_printk("Frequency Multiplier = %i\nTemperature = %i°C\n", values.mul, values.temp);
+		
 		if(!kfifo_is_full(&printk_queue)){
 			full_queue=false;
 			kfifo_in(&printk_queue, &values, 1);
