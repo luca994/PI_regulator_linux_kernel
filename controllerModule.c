@@ -33,15 +33,16 @@ static int read_temperature_msr(unsigned int core){
 	low = tjunction_celsius - low;
 	return low;
 }
+
 /*
- * return the min value among the two lowues taken in input
+ * return the min value among the two values taken in input
  */
 static int min_value(int val1,int val2){
     return val1<val2 ? val1:val2;
 }
 
 /*
- * return the max value among the two lowues taken in input
+ * return the max value among the two values taken in input
  */
 static int max_value(int val1,int val2){
     return val1>val2 ? val1:val2;
