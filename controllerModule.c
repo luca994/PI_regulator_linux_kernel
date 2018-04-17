@@ -72,6 +72,22 @@ static int read_frequency_msr(unsigned int core){
 }
 
 /*
+ * this function writes the new frequency in the msr register called
+ * MSR_IA32_PERF_CTL in all the cpu cores
+ * 
+ */
+static void write_frequency_msr(unsigned int mult_freq){
+	u32 low, high;
+    int core_count;
+    for(core_count=0;core_count<LOGICAL_CORES_N;core_count++){
+        rdmsr_on_cpu(core_count, MSR_IA32_PERF_CTL, &low, &high);
+        low &= INTEL_PERF_CTL_MASK<<16;
+        low |= (mult_freq<<8);    
+        wrmsr_on_cpu(core_count, MSR_IA32_PERF_CTL, low, high);
+    }
+}
+
+/*
  * this function disables the bit related to turbo in msr register
  * called MSR_IA32_MISC_ENABLE
  */
