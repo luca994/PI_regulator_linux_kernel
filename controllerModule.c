@@ -132,26 +132,26 @@ static void enable_tcc(void){
     wrmsr(MSR_IA32_MISC_ENABLE, low, high);
 }
 
-/*
- * this function writes the new frequency in the msr register called
- * MSR_IA32_PERF_CTL in all the cpu cores
- * 
- */
-static void write_frequency_msr(unsigned int mult_freq,unsigned int core){
-	u32 val, dummy;
-    //TODO check the frequency before write (control if it is too high)
-    rdmsr_on_cpu(core, MSR_IA32_PERF_CTL, &val, &dummy);
-    val &= INTEL_PERF_CTL_MASK<<16;
-    val |= (mult_freq<<8);    
-    wrmsr_on_cpu(core, MSR_IA32_PERF_CTL, val, dummy);
-}
 
 /*
- * this function takes the values from the printk_queue and prints them,
- * if the queue is empty the thread goes to sleep.
- * If the queue is full prints a warning message.
- * 
+ * it reads the min possible cpu multiplier
  */
+static int read_min_freq(void){
+    u32 low, high;
+    rdmsr(MSR_PLATFORM_INFO,low,high);
+	high = (high >> 16)&0xff;
+	return high;
+}
+
+
+/*
+ * it reads the max possible cpu multiplier
+ */
+static int read_max_freq(void){
+    u32 low, high;
+    rdmsr(MSR_PLATFORM_INFO,low,high);
+	low = (low >> 8)&0xff;
+	return low;
 }
 
 /*
