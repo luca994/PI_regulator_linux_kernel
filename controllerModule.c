@@ -71,6 +71,27 @@ static int read_frequency_msr(unsigned int core){
 	return (low >> 8);
 }
 
+/*
+ * this function disables the bit related to turbo in msr register
+ * called MSR_IA32_MISC_ENABLE
+ */
+static void disable_turbo(void){
+    u32 low, high;
+    rdmsr(MSR_IA32_MISC_ENABLE, low, high);
+    high |= (1UL<<6); 
+    wrmsr(MSR_IA32_MISC_ENABLE, low, high);
+}
+
+
+/*
+ * this function enables the bit related to turbo in msr register
+ * called MSR_IA32_MISC_ENABLE
+ */
+static void enable_turbo(void){
+    u32 low, high;
+    rdmsr(MSR_IA32_MISC_ENABLE, low, high);
+    high &= ~(1UL<<6); 
+    wrmsr(MSR_IA32_MISC_ENABLE, low, high);
 }
 
 /*
