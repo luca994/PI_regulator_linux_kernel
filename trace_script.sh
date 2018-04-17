@@ -1,10 +1,9 @@
 #!/bin/bash
-# use sudo to execute this script
 
-read -p 'Choose the interval tracing time: ' interv
-echo
-echo > /sys/kernel/debug/tracing/trace
-echo 1 > /sys/kernel/debug/tracing/events/msr/write_msr/enable
-sleep $interv
-cat /sys/kernel/debug/tracing/trace | grep 'write_msr: 199'
-echo 0 > /sys/kernel/debug/tracing/events/msr/write_msr/enable
+for FILE in /sys/kernel/debug/tracing/options/*
+do
+    echo '0' > "${FILE}"
+done
+echo '1' > /sys/kernel/debug/tracing/options/trace_printk
+
+echo ' ' > /sys/kernel/debug/tracing/trace
