@@ -61,14 +61,16 @@ static int get_max_core_temperature(void){
 }
 
 /*
- * this function reads the current value for the frequency in the msr register
+ * this function reads the current values for the frequency in the msr register
  * called MSR_IA32_PERF_STATUS
  */
 static int read_frequency_msr(unsigned int core){
-	u32 val, dummy;
-	rdmsr_on_cpu(core,MSR_IA32_PERF_STATUS, &val, &dummy);
-	val &= INTEL_PERF_STATUS_MASK;
-	return (val >> 8);
+	u32 low, high;
+	rdmsr_on_cpu(core,MSR_IA32_PERF_STATUS, &low, &high);
+	low &= INTEL_PERF_STATUS_MASK;
+	return (low >> 8);
+}
+
 }
 
 /*
