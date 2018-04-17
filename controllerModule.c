@@ -23,15 +23,16 @@ module_param(freq_param, int, S_IWUSR);
  * reads the temperature from the processor register MSR_IA32_THERM_STATUS
  * using rdmsr function, then returns it
  */
-static int get_temperature_msr(unsigned int core){
+static int read_temperature_msr(unsigned int core){
 	unsigned int tjunction_celsius;
-    u32 val, dummy;
-    rdmsr(MSR_IA32_TEMPERATURE_TARGET,val,dummy);
-    tjunction_celsius = ((val&(0xff<<16))>>16);
-	rdmsr_on_cpu(core,MSR_IA32_THERM_STATUS, &val, &dummy);
-	val = (val&THERM_MASK_THRESHOLD1) >> THERM_SHIFT_THRESHOLD1;
-	val = tjunction_celsius - val;
-	return val;
+    u32 low, high;
+    rdmsr(MSR_IA32_TEMPERATURE_TARGET,low,high);
+    tjunction_celsius = ((low&(0xff<<16))>>16);
+	rdmsr_on_cpu(core,MSR_IA32_THERM_STATUS, &low, &high);
+	low = (low&THERM_MASK_THRESHOLD1) >> THERM_SHIFT_THRESHOLD1;
+	low = tjunction_celsius - low;
+	return low;
+}
 /*
  * return the min value among the two lowues taken in input
  */
