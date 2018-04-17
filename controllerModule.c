@@ -60,6 +60,7 @@ static int get_max_core_temperature(void){
     return temp;
 }
 
+
 /*
  * this function reads the current values for the frequency in the msr register
  * called MSR_IA32_PERF_STATUS
@@ -154,6 +155,13 @@ static int read_max_freq(void){
 	return low;
 }
 
+static log_trace(unsigned int written_mult){
+    int core_count;
+    for(core_count=0;core_count<LOGICAL_CORES_N;core_count++){
+        trace_printk("Core:%i\n: Target Frequency Multiplier = %i\n: Actual Frequency Multiplier = %i\n: Temperature = %i°C\n", core_count, written_mult, read_frequency_msr(core_count), read_temperature_msr(core_count));
+    }
+    trace_printk("--------------------------------------\n");
+}
 /*
  * this function takes the temperature of the cores, passes it to the controller and modifies the
  * frequencies based on the value returned by the controller.
