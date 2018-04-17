@@ -47,10 +47,10 @@ static int read_frequency_msr(unsigned int core){
  * called MSR_IA32_MISC_ENABLE
  */
 static void disable_tcc(void){
-    u64 val, dummy;
-    rdmsr(MSR_IA32_MISC_ENABLE, val, dummy);
-    val &= ~(1UL<<3); 
-    wrmsr(MSR_IA32_MISC_ENABLE, val, dummy);
+    u32 low, high;
+    rdmsr(MSR_IA32_MISC_ENABLE, low, high);
+    low &= ~(1UL<<3); 
+    wrmsr(MSR_IA32_MISC_ENABLE, low, high);
 }
 
 /*
@@ -58,10 +58,10 @@ static void disable_tcc(void){
  * called MSR_IA32_MISC_ENABLE
  */
 static void enable_tcc(void){
-    u64 val, dummy;
-    rdmsr(MSR_IA32_MISC_ENABLE, val, dummy);
-    val |= (1UL<<3);
-    wrmsr(MSR_IA32_MISC_ENABLE, val, dummy);
+    u32 low, high;
+    rdmsr(MSR_IA32_MISC_ENABLE, low, high);
+    low |= (1UL<<3);
+    wrmsr(MSR_IA32_MISC_ENABLE, low, high);
 }
 
 /*
