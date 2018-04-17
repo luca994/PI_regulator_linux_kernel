@@ -46,6 +46,17 @@ static int min_value(int val1,int val2){
 static int max_value(int val1,int val2){
     return val1>val2 ? val1:val2;
 }
+
+/*
+ * it returns the temperature of the core with the highest temperature in celsius degree
+ */
+static int get_max_core_temperature(void){
+    int core_count;
+    int temp=0;
+    for(core_count=0;core_count<LOGICAL_CORES_N;core_count++){
+        temp=max_value(temp,read_temperature_msr(core_count));
+    }
+    return temp;
 }
 
 /*
