@@ -8,6 +8,9 @@
 #include <linux/sched.h>
 
 #define LOGICAL_CORES_N 8
+#define TIMER 5
+#define SET_POINT 80
+#define ALPHA 10
 #define INTEL_PERF_STATUS_MASK 0xffff
 
 static struct task_struct *controller_thread = NULL;
