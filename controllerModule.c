@@ -32,6 +32,19 @@ static int get_temperature_msr(unsigned int core){
 	val = (val&THERM_MASK_THRESHOLD1) >> THERM_SHIFT_THRESHOLD1;
 	val = tjunction_celsius - val;
 	return val;
+/*
+ * return the min value among the two lowues taken in input
+ */
+static int min_value(int val1,int val2){
+    return val1<val2 ? val1:val2;
+}
+
+/*
+ * return the max value among the two lowues taken in input
+ */
+static int max_value(int val1,int val2){
+    return val1>val2 ? val1:val2;
+}
 }
 
 /*
