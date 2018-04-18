@@ -216,6 +216,6 @@ static void __exit controller_module_exit(void){
 module_init(controller_module_init);
 module_exit(controller_module_exit);
 
-
-
+MODULE_AUTHOR("Riccardo Remigio, Luca Santini");
+MODULE_DESCRIPTION("Module for the control of temperature through a PI regulator");
 MODULE_LICENSE("GPL");
