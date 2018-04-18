@@ -20,7 +20,7 @@ module_param(debug, bool, S_IWUSR);
 
 
 /*
- * reads the temperature from the processor register MSR_IA32_THERM_STATUS
+ * it reads the temperature from the processor register MSR_IA32_THERM_STATUS
  * using rdmsr function, then returns it
  */
 static int read_temperature_msr(unsigned int core){
@@ -35,14 +35,14 @@ static int read_temperature_msr(unsigned int core){
 }
 
 /*
- * return the min value among the two values taken in input
+ * it returns the min value among the two values taken in input
  */
 static int min_value(int val1,int val2){
     return val1<val2 ? val1:val2;
 }
 
 /*
- * return the max value among the two values taken in input
+ * it returns the max value among the two values taken in input
  */
 static int max_value(int val1,int val2){
     return val1>val2 ? val1:val2;
@@ -62,7 +62,7 @@ static int get_max_core_temperature(void){
 
 
 /*
- * this function reads the current values for the frequency in the msr register
+ * it reads the current values for the frequency in the msr register
  * called MSR_IA32_PERF_STATUS
  */
 static int read_frequency_msr(unsigned int core){
@@ -73,7 +73,7 @@ static int read_frequency_msr(unsigned int core){
 }
 
 /*
- * this function writes the new frequency in the msr register called
+ * it writes the new frequency in the msr register called
  * MSR_IA32_PERF_CTL in all the cpu cores
  * 
  */
@@ -89,7 +89,7 @@ static void write_frequency_msr(unsigned int mult_freq){
 }
 
 /*
- * this function disables the bit related to turbo in msr register
+ * it disables the bit related to turbo in msr register
  * called MSR_IA32_MISC_ENABLE
  */
 static void disable_turbo(void){
@@ -101,7 +101,7 @@ static void disable_turbo(void){
 
 
 /*
- * this function enables the bit related to turbo in msr register
+ * it enables the bit related to turbo in msr register
  * called MSR_IA32_MISC_ENABLE
  */
 static void enable_turbo(void){
@@ -112,7 +112,7 @@ static void enable_turbo(void){
 }
 
 /*
- * this function disbles the bit related to TCC in msr register
+ * this function disbles the bit related to TCC (Thermal Control Circuit) in msr register
  * called MSR_IA32_MISC_ENABLE
  */
 static void disable_tcc(void){
@@ -123,7 +123,7 @@ static void disable_tcc(void){
 }
 
 /*
- * this function enables the bit related to TCC in msr register
+ * it enables the bit related to TCC (Thermal Control Circuit) in msr register
  * called MSR_IA32_MISC_ENABLE
  */
 static void enable_tcc(void){
@@ -135,7 +135,7 @@ static void enable_tcc(void){
 
 
 /*
- * it reads the min possible cpu multiplier
+ * it reads the min possible value for cpu frequency multiplier
  */
 static int read_min_freq(void){
     u32 low, high;
@@ -146,7 +146,7 @@ static int read_min_freq(void){
 
 
 /*
- * it reads the max possible cpu multiplier
+ * it reads the max possible value for cpu frequency multiplier
  */
 static int read_max_freq(void){
     u32 low, high;
@@ -155,13 +155,21 @@ static int read_max_freq(void){
 	return low;
 }
 
-static log_trace(unsigned int written_mult){
+/*
+ * it writes into the trace file some information about the core frequency and temeperature.
+ * trace_printk is a function used to debug, one call should take tenth of microseconds.
+ * the trace file is located in /sys/kernel/debug/tracing/trace
+ * 
+ */
+static void log_trace(unsigned int written_mult){
     int core_count;
     for(core_count=0;core_count<LOGICAL_CORES_N;core_count++){
         trace_printk("Core:%i\n: Target Frequency Multiplier = %i\n: Actual Frequency Multiplier = %i\n: Temperature = %i°C\n", core_count, written_mult, read_frequency_msr(core_count), read_temperature_msr(core_count));
     }
     trace_printk("--------------------------------------\n");
 }
+
+
 /*
  * this function takes the temperature of the cores, passes it to the controller and modifies the
  * frequencies based on the lowue returned by the controller.
