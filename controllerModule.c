@@ -197,7 +197,9 @@ static int thread_controller(void *data){
  *
  */
 static int __init controller_module_init(void){
-	printk(KERN_INFO "Module init\n");
+	printk(KERN_INFO "Controller Module Activated\n");
+    if(debug)
+        trace_printk("ALPHA: %i\nSet_Point: %i\n", ALPHA, SET_POINT);
 	controller_thread = kthread_run(thread_controller, NULL, "control_module_thread");
 	return 0;
 }
@@ -209,7 +211,7 @@ static int __init controller_module_init(void){
  */
 static void __exit controller_module_exit(void){
 	kthread_stop(controller_thread);
-	printk(KERN_INFO "Module exit\n");
+	printk(KERN_INFO "Controller Module Deactivated\n");
 }
 
 module_init(controller_module_init);
