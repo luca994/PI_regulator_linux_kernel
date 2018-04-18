@@ -2,6 +2,7 @@ import re
 import matplotlib.pyplot as plt
 from scipy import interpolate
 import numpy as np
+from sys import argv
 
 def plot_temp():
 	x=np.arange(0, len, 1)
@@ -17,7 +18,15 @@ def plot_freq():
 	ynew=f(x)
 	plt.plot(x, ynew, 'k', linewidth=0.5)
 
-file=open("trace",'r');
+file=None
+try:
+	if(argv[-1]=='plot.py'):
+		raise Exception
+	file=open(argv[-1], 'r')
+	print("Stampo "+argv[-1]+"\n")
+except Exception:
+	file=open('trace','r');
+	print("Stampo trace\n")
 log=file.readlines()
 file.close()
 camp=int(input("Inserisci il campionamento in ms (min 5ms): "))
@@ -45,6 +54,8 @@ for words in log:
 
 len=len(dati_temp['0'])
 print('Numero di campioni: '+str(len))
+print('Max temp: '+str(max(dati_temp['0']))+'\n')
+
 
 plt.subplot(2, 1, 1)
 plot_temp()
