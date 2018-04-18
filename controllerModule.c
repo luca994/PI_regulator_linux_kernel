@@ -10,8 +10,8 @@
 #define LOGICAL_CORES_N 8
 #define TIMER 5
 #define SET_POINT 80
-#define ALPHA 10
-#define INTEL_PERF_STATUS_MASK 0xffff
+#define ALPHA 1
+
 
 static struct task_struct *controller_thread = NULL;
 
@@ -68,7 +68,7 @@ static int get_max_core_temperature(void){
 static int read_frequency_msr(unsigned int core){
 	u32 low, high;
 	rdmsr_on_cpu(core,MSR_IA32_PERF_STATUS, &low, &high);
-	low &= INTEL_PERF_STATUS_MASK;
+	low &= 0xffff;
 	return (low >> 8);
 }
 
