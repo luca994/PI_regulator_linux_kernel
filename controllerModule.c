@@ -171,7 +171,7 @@ static void log_trace(unsigned int written_mult){
 
 
 /*
- * this function takes the temperature of the cores, passes it to the controller and modifies the
+ * it takes the temperature of the cores, passes it to the controller and modifies the
  * frequencies based on the lowue returned by the controller.
  *
  */
@@ -180,7 +180,7 @@ static int thread_controller(void *data){
     unsigned int max_freq,min_freq,freq_to_write;
     min_freq=read_min_freq();
     max_freq=read_max_freq();
-    //disable_tcc();
+    disable_tcc();
     disable_turbo();
 	while(!kthread_should_stop()){
         e = 200 * (SET_POINT - get_max_core_temperature());
@@ -190,11 +190,11 @@ static int thread_controller(void *data){
         e_old = e;
         freq_to_write = min_freq + u/200;
         write_frequency_msr(freq_to_write);
-        if(debug==true)
+        if(debug)
             log_trace(freq_to_write);
-		msleep(TIMER);
+		msleep(CONTROLLER_TIMER);
 	}
-	//enable_tcc();
+	enable_tcc();
 	enable_turbo();
 	return 0;
 }
