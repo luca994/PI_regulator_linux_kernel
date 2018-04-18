@@ -19,9 +19,9 @@ static int check_active_features(void *data){
     cpuid(0x06,&eax,&ebx,&ecx,&edx);
     printk(KERN_INFO "----------------------------------------------------\n");
     if(eax & (1<<1))
-        printk(KERN_INFO "Opportunistic processor operations ENABLED \n");
+        printk(KERN_INFO "Intel Turbo Boost Technology ENABLED \n");
     else
-        printk(KERN_INFO "Opportunistic processor operations DISABLED\n");
+        printk(KERN_INFO "Intel Turbo Boost Technology DISABLED\n");
     if(eax & (1<<7))
 		printk(KERN_INFO "HWP ENABLED\n");
 	else
