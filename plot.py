@@ -14,7 +14,7 @@ def plot_temp_all():
 		y=np.array(dati_temp[str(i)])
 		f=interpolate.interp1d(x, y)
 		ynew=f(x)
-		plt.plot(x, ynew, colour[int(i/2)], linewidth=0.5)
+		plt.plot(x, ynew, colour[int(i/2)], linewidth=0.5, label='Core'+str(int(i/2)))
 
 def plot_freq_all():
 	x=np.arange(0, len, 1)
@@ -23,21 +23,21 @@ def plot_freq_all():
 		y=np.array(dati_freq[str(i)])
 		f=interpolate.interp1d(x, y)
 		ynew=f(x)
-		plt.plot(x, ynew, colour[int(i/2)], linewidth=0.5)
+		plt.plot(x, ynew, colour[int(i/2)], linewidth=0.5, label='Core'+str(int(i/2)))
 
 def plot_temp():
 	x=np.arange(0, len, 1)
 	y=np.array(dati_temp['0'])
 	f=interpolate.interp1d(x, y)
 	ynew=f(x)
-	plt.plot(x, ynew, 'k', linewidth=0.5)
+	plt.plot(x, ynew, 'k', linewidth=0.5, label='Core0')
 
 def plot_freq():
 	x=np.arange(0, len, 1)
 	y=np.array(dati_freq['0'])
 	f=interpolate.interp1d(x, y)
 	ynew=f(x)
-	plt.plot(x, ynew, 'k', linewidth=0.5)
+	plt.plot(x, ynew, 'k', linewidth=0.5, label='Core0')
 
 file=None
 try:
@@ -62,7 +62,7 @@ for words in log:
 	if(delay==0):
 		if('Core' in words):
 			core=words[-2]
-		if('Actual Frequency' in words):
+		if('Target Frequency' in words):
 			freq=words[-3:-1]
 			dati_freq[str(core)]=dati_freq[str(core)]+[freq]
 		if('Temperature' in words):
@@ -75,7 +75,10 @@ for words in log:
 
 len=len(dati_temp['0'])
 print('Numero di campioni: '+str(len))
-print('Max temp: '+str(max(dati_temp['0']))+'\n')
+print('Max temp core 0: '+str(max(dati_temp['0'])))
+print('Max temp core 1: '+str(max(dati_temp['2'])))
+print('Max temp core 2: '+str(max(dati_temp['4'])))
+print('Max temp core 3: '+str(max(dati_temp['6'])))
 
 
 plt.subplot(2, 1, 1)
@@ -83,9 +86,14 @@ if('all' in argv):
 	plot_temp_all()
 else:
 	plot_temp()
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+plt.xlabel('Time ['+str(camp*5)+'ms]')
+plt.ylabel('Temperature [°C]')
 plt.subplot(2, 1, 2)
 if('all' in argv):
 	plot_freq_all()
 else:
 	plot_freq()
+plt.xlabel('Time ['+str(camp*5)+'ms]')
+plt.ylabel('Frequency Multiplier')
 plt.show()
