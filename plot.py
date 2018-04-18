@@ -4,6 +4,27 @@ from scipy import interpolate
 import numpy as np
 from sys import argv
 
+'''use "all" keyword as parameter to print all the cores, put the name/path of the file as parameter to use
+   that file instead of "trace" (put the name of the file as last parameter) '''
+
+def plot_temp_all():
+	x=np.arange(0, len, 1)
+	colour=('k', 'r', 'g', 'b')
+	for i in [0,2,4,6]:
+		y=np.array(dati_temp[str(i)])
+		f=interpolate.interp1d(x, y)
+		ynew=f(x)
+		plt.plot(x, ynew, colour[int(i/2)], linewidth=0.5)
+
+def plot_freq_all():
+	x=np.arange(0, len, 1)
+	colour=('k', 'r', 'g', 'b')
+	for i in [0,2,4,6]:
+		y=np.array(dati_freq[str(i)])
+		f=interpolate.interp1d(x, y)
+		ynew=f(x)
+		plt.plot(x, ynew, colour[int(i/2)], linewidth=0.5)
+
 def plot_temp():
 	x=np.arange(0, len, 1)
 	y=np.array(dati_temp['0'])
@@ -58,7 +79,13 @@ print('Max temp: '+str(max(dati_temp['0']))+'\n')
 
 
 plt.subplot(2, 1, 1)
-plot_temp()
+if('all' in argv):
+	plot_temp_all()
+else:
+	plot_temp()
 plt.subplot(2, 1, 2)
-plot_freq()
+if('all' in argv):
+	plot_freq_all()
+else:
+	plot_freq()
 plt.show()
