@@ -8,7 +8,7 @@
 #include <linux/sched.h>
 
 #define LOGICAL_CORES_N 8
-#define TIMER 5
+#define CONTROLLER_TIMER 5
 #define SET_POINT 80
 #define ALPHA 1
 
