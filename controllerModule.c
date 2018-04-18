@@ -15,8 +15,8 @@
 
 static struct task_struct *controller_thread = NULL;
 
-static int freq_param = 8;
-module_param(freq_param, int, S_IWUSR);
+static bool debug = false;
+module_param(debug, bool, S_IWUSR);
 
 
 /*
@@ -174,17 +174,16 @@ static int thread_controller(void *data){
     max_freq=read_max_freq();
     //disable_tcc();
     disable_turbo();
-    printk(KERN_INFO "max: %i", read_max_freq());
-    printk(KERN_INFO "min: %i", read_min_freq());
 	while(!kthread_should_stop()){
         e = 200 * (SET_POINT - get_max_core_temperature());
         u = u_old + 7*ALPHA*e - 6*ALPHA*e_old;
-        u = max_value(0, min_value(200 ,u));
+        u = max_value(0, min_value(200*(max_freq-min_freq),u));
         u_old = u;
         e_old = e;
-        freq_to_write = min_freq + (u*(max_freq-min_freq))/200;
+        freq_to_write = min_freq + u/200;
         write_frequency_msr(freq_to_write);
-        log_trace(freq_to_write);
+        if(debug==true)
+            log_trace(freq_to_write);
 		msleep(TIMER);
 	}
 	//enable_tcc();
