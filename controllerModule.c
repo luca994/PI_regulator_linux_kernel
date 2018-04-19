@@ -8,7 +8,8 @@
 #include <linux/sched.h>
 
 #define LOGICAL_CORES_N 8
-#define CONTROLLER_TIMER 5
+#define CONTROLLER_TIMER_LOW 4000
+#define CONTROLLER_TIMER_HIGH 5000
 #define SET_POINT 80
 #define ALPHA 1
 
@@ -192,7 +193,7 @@ static int thread_controller(void *data){
         write_frequency_msr(freq_to_write);
         if(debug)
             log_trace(freq_to_write);
-		msleep(CONTROLLER_TIMER);
+		usleep_range(CONTROLLER_TIMER_LOW,CONTROLLER_TIMER_HIGH);
 	}
 	enable_tcc();
 	enable_turbo();
