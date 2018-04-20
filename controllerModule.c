@@ -173,7 +173,7 @@ static void log_trace(unsigned int written_mult){
 
 /*
  * it takes the temperature of the cores, passes it to the controller and modifies the
- * frequencies based on the lowue returned by the controller.
+ * frequencies based on the value returned by the controller.
  *
  */
 static int thread_controller(void *data){
