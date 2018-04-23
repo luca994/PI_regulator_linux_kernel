@@ -73,12 +73,39 @@ for words in log:
 		if(delay==camp):
 			delay=0
 
+
 len=len(dati_temp['0'])
+temp_sum=[0,0,0,0]
+for i in [0,2,4,6]:
+	for dati in dati_temp[str(i)]:
+		temp_sum[int(i/2)] = temp_sum[int(i/2)] + int(dati)
 print('Numero di campioni: '+str(len))
+print("----------------------")
+print('Initial temp core 0: '+str(dati_temp['0'][0]))
+print('Final temp core 0: '+str(dati_temp['0'][len-1]))
+print('Mean temp core 0: '+str(temp_sum[0]/len))
 print('Max temp core 0: '+str(max(dati_temp['0'])))
+print("----------------------")
+print('Initial temp core 1: '+str(dati_temp['2'][0]))
+print('Final temp core 1: '+str(dati_temp['2'][len-1]))
+print('Mean temp core 1: '+str(temp_sum[1]/len))
 print('Max temp core 1: '+str(max(dati_temp['2'])))
+print("----------------------")
+print('Initial temp core 2: '+str(dati_temp['4'][0]))
+print('Final temp core 2: '+str(dati_temp['4'][len-1]))
+print('Mean temp core 2: '+str(temp_sum[2]/len))
 print('Max temp core 2: '+str(max(dati_temp['4'])))
+print("----------------------")
+print('Initial temp core 3: '+str(dati_temp['6'][0]))
+print('Final temp core 3: '+str(dati_temp['6'][len-1]))
+print('Mean temp core 3: '+str(temp_sum[0]/len))
 print('Max temp core 3: '+str(max(dati_temp['6'])))
+print("----------------------")
+
+frequency_sum=0
+for dati in dati_freq['0']:
+	frequency_sum = frequency_sum + int(dati)
+print('Mean freq: '+str(frequency_sum/len))
 
 
 plt.subplot(2, 1, 1)
